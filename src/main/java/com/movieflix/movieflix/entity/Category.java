@@ -1,0 +1,25 @@
+package com.movieflix.movieflix.entity;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table(name="category")
+public class Category {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @Column(name ="name", length = 100, nullable = false) //nullable faz com que o nome seja OBRIGATÓRIO
+    private String name;
+
+
+}

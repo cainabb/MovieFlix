@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: movieflix
+
+
+  jpa:
+    show-sql: true
+
+
+  flyway:
+    enabled: true
+
+
