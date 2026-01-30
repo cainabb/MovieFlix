@@ -1,6 +1,9 @@
 package com.movieflix.movieflix.controller;
 
 import com.movieflix.movieflix.entity.Category;
+import com.movieflix.movieflix.mapper.CategoryMapper;
+import com.movieflix.movieflix.request.CategoryRequest;
+import com.movieflix.movieflix.response.CategoryResponse;
 import com.movieflix.movieflix.service.CategoryService;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -18,16 +21,19 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping
-    public List<Category> getAllCategories(){
-
-        return categoryService.findAll();
+    public ResponseEntity<List<CategoryResponse>> getAllCategories(){
+        List<Category> categories = categoryService.findAll();
+        List<CategoryResponse> List =   categories.stream()
+                .map(category -> CategoryMapper.toCategoryResponse(category))
+                .toList();
+        return ResponseEntity.ok(List);
     }
 
     @GetMapping("/{id}")
-    public Category getCategoriesById(@PathVariable Long id){
+    public ResponseEntity<> getCategoriesById(@PathVariable Long id){
         Optional<Category> optionalCategory=categoryService.findById(id);
-        if(optionalCategory.isPresent()){ //SE TEM ALGO DENTRO DE CATEGORY "IsPresent" então faça:
-            return optionalCategory.get();
+        if(optionalCategory.isPresent()){
+            return CategoryMapper.toCategoryResponse(optionalCategory.get());
         } else
             return null;
     }
@@ -39,9 +45,10 @@ public class CategoryController {
 
 
     @PostMapping
-    public Category saveCategory(@RequestBody Category category){
-
-        return categoryService.saveCategory(category);
+    public CategoryResponse saveCategory(@RequestBody CategoryRequest request){
+        Category newCategory = CategoryMapper.toCategory(request);
+        Category savedCategory = categoryService.saveCategory(newCategory);
+    return CategoryMapper.toCategoryResponse(savedCategory);
     }
 
 
